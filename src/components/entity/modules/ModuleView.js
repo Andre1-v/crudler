@@ -1,5 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import FullWidthImage from "react-native-fullwidth-image";
+import { Button, ButtonTray } from "../../UI/Button.js";
+import Icons from "../../UI/Icons.js";
+
+import { setStatusBarBackgroundColor } from "expo-status-bar";
 
 const ModuleView = ({ module }) => {
   //Initialisations --------------------------
@@ -20,9 +24,18 @@ const ModuleView = ({ module }) => {
         <Text style={styles.text}>Level {module.ModuleLevel}</Text>
         <Text style={styles.text}>
           {module.ModuleLeaderName}
-          <Text style={styles.dimText}> (Module Leader)</Text>{" "}
+          <Text style={styles.dimText}> (Module Leader)</Text>
         </Text>
       </View>
+      <ButtonTray>
+        <Button icon={<Icons.Edit />} label="Modify" />
+        <Button
+          icon={<Icons.Delete />}
+          label="Delete"
+          styleButton={{ backgroundColor: "mistyrose" }}
+          styleLabel={{ color: "red" }}
+        />
+      </ButtonTray>
     </View>
   );
 };

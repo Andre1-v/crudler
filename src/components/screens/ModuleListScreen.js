@@ -1,9 +1,9 @@
 import { StyleSheet } from "react-native";
 import Screen from "../layout/Screen";
 import ModuleList from "../entity/modules/ModuleList";
-import RenderCount from "../../UI/RenderCount.js";
+import RenderCount from "../UI/RenderCount.js";
 
-import initialModules from "../../data/modules.js";
+import initialModules from "../data/modules.js";
 import { useState } from "react";
 
 export const ModuleListScreen = ({ navigation }) => {
