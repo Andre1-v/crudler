@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { LogBox, StyleSheet } from "react-native";
 import Screen from "../layout/Screen";
 import ModuleList from "../entity/modules/ModuleList";
 import RenderCount from "../UI/RenderCount.js";
@@ -8,14 +8,26 @@ import { useState } from "react";
 
 export const ModuleListScreen = ({ navigation }) => {
   //Initialisations --------------------------
-  const [modules, setModules] = useState(initialModules);
+
+  LogBox.ignoreLogs([
+    "Non-serializable values were found in the navigation state",
+  ]);
 
   // State -----------------------------------
+
+  const [modules, setModules] = useState(initialModules);
   // Handlers --------------------------------
-  const handleSelect = (module) =>
-    navigation.navigate("ModuleViewScreen", { module });
+
   const handleDelete = (module) =>
     setModules(modules.filter((item) => item.ModuleID !== module.ModuleID));
+  const onDelete = (module) => {
+    handleDelete(module);
+    navigation.goBack();
+  };
+
+  const handleSelect = (module) =>
+    navigation.navigate("ModuleViewScreen", { module, onDelete });
+
   // View ------------------------------------
   return (
     <Screen>

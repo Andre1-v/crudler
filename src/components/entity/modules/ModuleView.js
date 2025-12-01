@@ -1,14 +1,22 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import FullWidthImage from "react-native-fullwidth-image";
 import { Button, ButtonTray } from "../../UI/Button.js";
 import Icons from "../../UI/Icons.js";
 
 import { setStatusBarBackgroundColor } from "expo-status-bar";
 
-const ModuleView = ({ module }) => {
+const ModuleView = ({ module, onDelete }) => {
   //Initialisations --------------------------
   // State -----------------------------------
   // Handlers --------------------------------
+  const handleDelete = () => onDelete(module);
+
+  const requestDelete = () =>
+    Alert.alert(
+      "Delete Module",
+      `Are you sure that you want to delete module${module.ModuleCode} ${module.ModuleName}?`,
+      [{ text: "Cancel" }, { text: "Delete", onPress: handleDelete }]
+    );
   // View ------------------------------------
   return (
     <View style={styles.container}>
@@ -32,8 +40,7 @@ const ModuleView = ({ module }) => {
         <Button
           icon={<Icons.Delete />}
           label="Delete"
-          styleButton={{ backgroundColor: "mistyrose" }}
-          styleLabel={{ color: "red" }}
+          onClick={requestDelete}
         />
       </ButtonTray>
     </View>
