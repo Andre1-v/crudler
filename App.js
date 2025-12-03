@@ -6,7 +6,7 @@ import ModuleViewScreen from "./src/components/screens/ModuleViewScreen";
 import ModuleModifyScreen from "./src/components/screens/ModuleModifyScreen";
 const Stack = createNativeStackNavigator();
 
-export const App = () => {
+const App = () => {
   //Initialisations --------------------------
   // State -----------------------------------
   // Handlers --------------------------------
