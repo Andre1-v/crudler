@@ -6,8 +6,9 @@ import Icons from "../UI/Icons.js";
 import { Button, ButtonTray } from "../UI/Button.js";
 import initialModules from "../data/modules.js";
 import { useState } from "react";
+import ModuleAddScreen from "./ModuleAddScreen.js";
 
-export const ModuleListScreen = ({ navigation }) => {
+const ModuleListScreen = ({ navigation }) => {
   //Initialisations --------------------------
 
   LogBox.ignoreLogs([
@@ -24,9 +25,21 @@ export const ModuleListScreen = ({ navigation }) => {
 
   const handleAdd = (module) => setModules([...modules, module]);
 
+  const handleModify = (updatedModule) =>
+    setModules(
+      modules.map((module) =>
+        module.ModuleID === updatedModule.ModuleID ? updatedModule : module
+      )
+    );
+
   const onAdd = (module) => {
     handleAdd(module);
     navigation.goBack();
+  };
+
+  const onModify = (module) => {
+    handleModify(module);
+    navigation.replace("ModuleListScreen", { module, onDelete, onModify });
   };
 
   const onDelete = (module) => {
@@ -35,7 +48,7 @@ export const ModuleListScreen = ({ navigation }) => {
   };
 
   const gotoViewScreen = (module) =>
-    navigation.navigate("ModuleViewScreen", { module, onDelete });
+    navigation.navigate("ModuleViewScreen", { module, onDelete, onModify });
 
   const gotoAddScreen = () => navigation.navigate("ModuleAddScreen", { onAdd });
 
