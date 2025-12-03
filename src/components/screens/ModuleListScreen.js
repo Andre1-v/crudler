@@ -1,29 +1,42 @@
-import { LogBox, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
+import { StyleSheet, Text } from "react-native";
+//import ignoreWarnings from "../../utils/ignoreWarnings";
+import API from "../API/API.js";
 import Screen from "../layout/Screen";
 import ModuleList from "../entity/modules/ModuleList";
 import RenderCount from "../UI/RenderCount.js";
 import Icons from "../UI/Icons.js";
 import { Button, ButtonTray } from "../UI/Button.js";
 import initialModules from "../data/modules.js";
-import { useState } from "react";
-import ModuleAddScreen from "./ModuleAddScreen.js";
 
 const ModuleListScreen = ({ navigation }) => {
   //Initialisations --------------------------
 
-  LogBox.ignoreLogs([
-    "Non-serializable values were found in the navigation state",
-  ]);
+  //ignoreWarnings();
+  const modulesEndpoint = "https://softwarehub.uk/unibase/api/modules";
 
-  // State -----------------------------------
+  // State -----------------------------------r
 
-  const [modules, setModules] = useState(initialModules);
+  const [modules, setModules] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadModules = async (endpoint) => {
+    const response = await API.get(endpoint);
+    setIsLoading(false);
+    if (response.isSuccess) setModules(response.result);
+  };
+
+  useEffect(() => {
+    loadModules(modulesEndpoint);
+  }, []);
   // Handlers --------------------------------
 
-  const handleDelete = (module) =>
-    setModules(modules.filter((item) => item.ModuleID !== module.ModuleID));
+  const handleDelete = (deletedModule) =>
+    setModules(
+      modules.filter((module) => module.ModuleID !== deletedModule.ModuleID)
+    );
 
-  const handleAdd = (module) => setModules([...modules, module]);
+  const handleAdd = (newModule) => setModules([...modules, newModule]);
 
   const handleModify = (updatedModule) =>
     setModules(
@@ -49,7 +62,6 @@ const ModuleListScreen = ({ navigation }) => {
 
   const gotoViewScreen = (module) =>
     navigation.navigate("ModuleViewScreen", { module, onDelete, onModify });
-
   const gotoAddScreen = () => navigation.navigate("ModuleAddScreen", { onAdd });
 
   // View ------------------------------------
@@ -58,6 +70,7 @@ const ModuleListScreen = ({ navigation }) => {
       <ButtonTray>
         <Button label="Add" icon={<Icons.Add />} onClick={gotoAddScreen} />
       </ButtonTray>
+      {isLoading && <Text>Loading records ...</Text>}
       <RenderCount />
       <ModuleList modules={modules} onSelect={gotoViewScreen} />
     </Screen>
